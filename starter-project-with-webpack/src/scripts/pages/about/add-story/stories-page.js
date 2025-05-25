@@ -1,7 +1,8 @@
 // src/scripts/pages/stories/stories-page.js
 import { getAllStories } from '../../../data/api';
 import { showFormattedDate } from '../../../utils';
-import { clearMap, showMap } from '../../../utils/map-helper'; // Import map helper functions
+import { clearMap, showMap } from '../../../utils/map-helper';
+import UserAuth from '../../../data/user-auth'; // Import UserAuth
 
 export default class StoriesPage {
   async render() {
@@ -23,7 +24,8 @@ export default class StoriesPage {
     clearMap();
 
     try {
-      const response = await getAllStories();
+      const token = UserAuth.getUserToken(); // Ambil token pengguna
+      const response = await getAllStories(token); // Kirim token saat mengambil cerita
 
       if (loadingIndicator) {
         loadingIndicator.remove();

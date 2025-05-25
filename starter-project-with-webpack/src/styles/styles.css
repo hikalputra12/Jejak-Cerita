@@ -680,6 +680,8 @@ html::view-transition-new(root) {
   .auth-links {
     margin-left: auto;
     flex-direction: row;
+    display: flex !important; /* Memastikan ini terlihat di desktop */
+    align-items: center; /* Menyelaraskan item secara vertikal */
   }
 
   /* Desktop specific nav-drawer behavior */

@@ -16,6 +16,8 @@ class LoginPage {
             <label for="loginPassword" class="form-label">Password <span class="required">*</span></label>
             <input type="password" class="form-control" id="loginPassword" name="password" required minlength="6" aria-label="Password Anda">
           </div>
+          <p id="loginError" class="text-danger text-center d-none">
+            </p>
           <button type="submit" class="btn btn-primary btn-lg w-100">Login</button>
           <p class="auth-switch">Belum punya akun? <a href="#/register">Daftar di sini</a></p>
         </form>
@@ -25,8 +27,12 @@ class LoginPage {
 
   async afterRender() {
     const loginForm = document.getElementById('loginForm');
+    const loginErrorDisplay = document.getElementById('loginError');
+
     loginForm.addEventListener('submit', async (event) => {
       event.preventDefault();
+
+      loginErrorDisplay.classList.add('d-none'); // Sembunyikan pesan error sebelumnya
 
       const email = document.getElementById('loginEmail').value;
       const password = document.getElementById('loginPassword').value;
@@ -35,15 +41,19 @@ class LoginPage {
         const response = await loginUser({ email, password }); // Panggil fungsi loginUser dari API
 
         if (response.error) {
-          alert(`Login gagal: ${response.message}`);
+          loginErrorDisplay.textContent = `Login gagal: ${response.message}`; // Tampilkan pesan error dari API
+          loginErrorDisplay.classList.remove('d-none');
         } else {
+          // Akses 'response.data.token' dan 'response.data.user' karena api.js sudah memformatnya
           UserAuth.setUserToken(response.data.token);
-          // Optional: UserAuth.setUserData(response.data.user); // Jika API mengembalikan data user
+          if (response.data.user) {
+            UserAuth.setUserData(response.data.user);
+          }
           alert('Login berhasil! Selamat datang kembali.');
-          window.location.hash = '#/'; // Redirect ke halaman beranda
+          window.location.hash = '#/';
           if (document.startViewTransition) {
             document.startViewTransition(() => {
-              window.location.reload(); // Reload halaman untuk memperbarui status UI (misal: menu navigasi)
+              window.location.reload();
             });
           } else {
             window.location.reload();
@@ -51,7 +61,8 @@ class LoginPage {
         }
       } catch (error) {
         console.error('Error saat login:', error);
-        alert('Terjadi kesalahan saat login. Silakan coba lagi.');
+        loginErrorDisplay.textContent = 'Terjadi kesalahan saat login (jaringan/server). Silakan coba lagi.'; // Pesan error umum untuk error jaringan/tak terduga
+        loginErrorDisplay.classList.remove('d-none');
       }
     });
   }

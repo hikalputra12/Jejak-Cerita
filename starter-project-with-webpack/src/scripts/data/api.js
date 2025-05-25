@@ -1,3 +1,4 @@
+// src/scripts/data/api.js
 import CONFIG from '../config';
 
 const ENDPOINTS = {
@@ -6,7 +7,7 @@ const ENDPOINTS = {
   ADD_NEW_STORY: `${CONFIG.BASE_URL}/stories`,
   ADD_NEW_STORY_WITH_GUEST_ACCOUNT: `${CONFIG.BASE_URL}/stories/guest`,
   GET_ALL_STORIES: `${CONFIG.BASE_URL}/stories`,
-  DETAIL_STORY: `${CONFIG.BASE_URL}/stories/:id`,// notes penting id bakalan di ganti
+  DETAIL_STORY: `${CONFIG.BASE_URL}/stories/:id`,
   SUBSCRIBE_NOTIFICATION: `${CONFIG.BASE_URL}/notifications/subscribe`,
   UNSUBSCRIBE_NOTIFICATION: `${CONFIG.BASE_URL}/notifications/unsubscribe`,
 };
@@ -30,7 +31,22 @@ export async function loginUser(userData) {
     },
     body: JSON.stringify(userData),
   });
-  return await fetchResponse.json();
+  // Perubahan di sini: Mengakses data dari 'loginResult'
+  const responseJson = await fetchResponse.json();
+  if (!responseJson.error && responseJson.loginResult) {
+      return {
+          error: false,
+          message: responseJson.message,
+          data: { // Bungkus data ke dalam objek 'data' sesuai harapan kode Anda
+              token: responseJson.loginResult.token,
+              user: { // Simpan data user jika diperlukan
+                  userId: responseJson.loginResult.userId,
+                  name: responseJson.loginResult.name
+              }
+          }
+      };
+  }
+  return responseJson; // Kembalikan respons asli jika ada error
 }
 export async function addNewStory(storyData, token) {
   const fetchResponse = await fetch(ENDPOINTS.ADD_NEW_STORY, {
@@ -86,5 +102,3 @@ export async function unsubscribeNotification(endpoint, token) {
   });
   return await fetchResponse.json();
 }
-
-
