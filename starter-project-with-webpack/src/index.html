@@ -3,21 +3,32 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha2d=F5feFqPjYQWzL0S7Gf+6H/h+p+6n4+k+4q/k+4x/k+4y/k+4z/k+4A==" crossorigin="" />
     <link rel="shortcut icon" href="favicon.png">
 
     <title>Jejak Cerita</title>
   </head>
   <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <header>
       <div class="main-header container">
-        <a class="brand-name" href="#/">Jejak Cerita</a>
+        <a class="brand-name" href="#/">
+          <img src="favicon.png" alt="Jejak Cerita Logo" width="30" height="30" class="d-inline-block align-top me-2">
+          Jejak Cerita
+        </a>
         <nav id="navigation-drawer" class="navigation-drawer">
           <ul id="nav-list" class="nav-list">
             <li><a href="#/">Beranda</a></li>
-            <li><a href="#/about">About</a></li>
+            <li><a href="#/stories">Semua Cerita</a></li> <li><a href="#/add-story">Tambah Cerita</a></li> <li><a href="#/about">Tentang Kami</a></li> <li><a href="#/login">Login</a></li>
+            <li><a href="#/register">Daftar</a></li>
           </ul>
         </nav>
 
+        <div class="auth-links d-flex align-items-center">
+          </div>
         <button id="drawer-button" class="drawer-button">☰</button>
       </div>
     </header>

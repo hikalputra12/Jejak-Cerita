@@ -1,20 +1,20 @@
 // src/scripts/pages/auth/login-page.js
-import { loginUser } from '../../data/api'; // Menggunakan loginUser sesuai API Anda
+import { loginUser } from '../../data/api';
 import UserAuth from '../../data/user-auth';
 
 class LoginPage {
   async render() {
     return `
-      <section class="auth-section container">
+      <section class="auth-section container my-5">
         <h1 class="section-title">Login ke Akun Anda</h1>
         <form id="loginForm" class="auth-form">
-          <div class="form-group">
-            <label for="loginEmail">Email <span class="required">*</span></label>
-            <input type="email" id="loginEmail" name="email" placeholder="contoh@domain.com" required>
+          <div class="form-group mb-3">
+            <label for="loginEmail" class="form-label">Email <span class="required">*</span></label>
+            <input type="email" class="form-control" id="loginEmail" name="email" placeholder="contoh@domain.com" required aria-label="Email Anda">
           </div>
-          <div class="form-group">
-            <label for="loginPassword">Password <span class="required">*</span></label>
-            <input type="password" id="loginPassword" name="password" required minlength="6">
+          <div class="form-group mb-4">
+            <label for="loginPassword" class="form-label">Password <span class="required">*</span></label>
+            <input type="password" class="form-control" id="loginPassword" name="password" required minlength="6" aria-label="Password Anda">
           </div>
           <button type="submit" class="btn btn-primary btn-lg w-100">Login</button>
           <p class="auth-switch">Belum punya akun? <a href="#/register">Daftar di sini</a></p>
@@ -37,13 +37,17 @@ class LoginPage {
         if (response.error) {
           alert(`Login gagal: ${response.message}`);
         } else {
-          // Simpan token akses ke localStorage menggunakan UserAuth
           UserAuth.setUserToken(response.data.token);
-          // Jika API mengembalikan data user, simpan juga:
-          // UserAuth.setUserData(response.data.user);
+          // Optional: UserAuth.setUserData(response.data.user); // Jika API mengembalikan data user
           alert('Login berhasil! Selamat datang kembali.');
           window.location.hash = '#/'; // Redirect ke halaman beranda
-          window.location.reload(); // Reload halaman untuk memperbarui status UI (misal: menu navigasi)
+          if (document.startViewTransition) {
+            document.startViewTransition(() => {
+              window.location.reload(); // Reload halaman untuk memperbarui status UI (misal: menu navigasi)
+            });
+          } else {
+            window.location.reload();
+          }
         }
       } catch (error) {
         console.error('Error saat login:', error);
