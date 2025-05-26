@@ -1,4 +1,3 @@
-// src/scripts/pages/auth/register-page.js
 import { registerUser } from '../../data/api';
 import UserAuth from '../../data/user-auth';
 
@@ -36,23 +35,22 @@ class RegisterPage {
       const email = document.getElementById('registerEmail').value;
       const password = document.getElementById('registerPassword').value;
 
-      // Basic client-side validation
       if (password.length < 6) {
         alert('Password harus memiliki minimal 6 karakter.');
         return;
       }
 
       try {
-        const response = await registerUser({ name, email, password }); // Panggil fungsi registerUser dari API
+        const response = await registerUser({ name, email, password });
 
         if (response.error) {
           alert(`Registrasi gagal: ${response.message}`);
         } else {
           alert('Registrasi berhasil! Anda akan segera diarahkan ke halaman login.');
-          window.location.hash = '#/login'; // Redirect ke halaman login
+          window.location.hash = '#/login'; 
           if (document.startViewTransition) {
             document.startViewTransition(() => {
-              window.location.reload(); // Reload untuk memperbarui status UI
+              window.location.reload(); 
             });
           } else {
             window.location.reload();

@@ -1,5 +1,4 @@
-// src/scripts/pages/add-story/add-story-page.js
-import { addNewStory } from '../../../data/api'; // Menggunakan addNewStory dari API
+import { addNewStory } from '../../../data/api';
 import UserAuth from '../../../data/user-auth';
 import { initMap, setMapClickListener, clearMap, addMarker, setupGeolocation } from '../../../utils/map-helper';
 
@@ -53,11 +52,9 @@ export default class AddStoryPage {
       return;
     }
 
-    // Inisialisasi peta setelah elemennya ada di DOM
     mapInstance = initMap('mapInputPreview', -6.2, 106.816666, 13);
-    mapInstance.invalidateSize(); // Penting untuk memastikan peta dirender dengan benar
+    mapInstance.invalidateSize();
 
-    // Setup geolokasi (jika diizinkan dan didukung)
     setupGeolocation(mapInstance, latitudeInput, longitudeInput, mapCoordinates);
 
     setMapClickListener(mapInstance, (lat, lon) => {
@@ -74,7 +71,7 @@ export default class AddStoryPage {
     storyPhotoInput.addEventListener('change', (event) => {
       const file = event.target.files[0];
       if (file) {
-        photoErrorDisplay.classList.add('d-none'); // Sembunyikan error sebelumnya
+        photoErrorDisplay.classList.add('d-none');
         const reader = new FileReader();
         reader.onload = (e) => {
           photoPreview.src = e.target.result;
@@ -84,7 +81,7 @@ export default class AddStoryPage {
           photoErrorDisplay.textContent = 'Gagal memuat pratinjau gambar. Format tidak didukung atau rusak.';
           photoErrorDisplay.classList.remove('d-none');
           photoPreview.classList.add('d-none');
-          photoPreview.src = '#'; // Reset src
+          photoPreview.src = '#';
         };
         reader.readAsDataURL(file);
       } else {
@@ -115,7 +112,7 @@ export default class AddStoryPage {
       }
 
       try {
-        const response = await addNewStory(formData, token); // Panggil addNewStory dari api.js
+        const response = await addNewStory(formData, token);
 
         if (response.error) {
           alert(`Gagal menambahkan cerita: ${response.message}`);

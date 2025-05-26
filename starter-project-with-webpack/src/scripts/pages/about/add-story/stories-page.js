@@ -1,4 +1,3 @@
-// src/scripts/pages/about/add-story/stories-page.js
 import { getAllStories } from '../../../data/api';
 import { showFormattedDate } from '../../../utils';
 import { clearMap, showMap } from '../../../utils/map-helper';
@@ -20,7 +19,7 @@ export default class StoriesPage {
     const storyListContainer = document.getElementById('all-story-list-container');
     const loadingIndicator = document.getElementById('loading-all-stories');
 
-    clearMap(); // Clear any existing map instances on the page before rendering new content
+    clearMap();
 
     try {
       const token = UserAuth.getUserToken();
@@ -38,7 +37,7 @@ export default class StoriesPage {
         storiesResponse.listStory.forEach(story => {
           const photoAltText = story.description ? `Gambar cerita: ${story.description.substring(0, 50)}...` : 'Gambar cerita';
 
-          // Tambahkan log konsol untuk memeriksa URL gambar
+
           console.log(`Story ID: ${story.id}, Photo URL: ${story.photoUrl}`);
 
           const storyCard = `
@@ -68,7 +67,7 @@ export default class StoriesPage {
           storyListContainer.innerHTML += storyCard;
         });
 
-        // Tambahkan event listener untuk tombol "Lihat di Peta" (jika ada)
+
         storyListContainer.querySelectorAll('.view-on-map-button').forEach(button => {
           button.addEventListener('click', (event) => {
             const storyId = event.target.dataset.storyId;

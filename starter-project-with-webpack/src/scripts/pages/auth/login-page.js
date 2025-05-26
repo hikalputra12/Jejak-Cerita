@@ -1,4 +1,3 @@
-// src/scripts/pages/auth/login-page.js
 import { loginUser } from '../../data/api';
 import UserAuth from '../../data/user-auth';
 
@@ -32,19 +31,17 @@ class LoginPage {
     loginForm.addEventListener('submit', async (event) => {
       event.preventDefault();
 
-      loginErrorDisplay.classList.add('d-none'); // Sembunyikan pesan error sebelumnya
-
+      loginErrorDisplay.classList.add('d-none'); 
       const email = document.getElementById('loginEmail').value;
       const password = document.getElementById('loginPassword').value;
 
       try {
-        const response = await loginUser({ email, password }); // Panggil fungsi loginUser dari API
+        const response = await loginUser({ email, password }); 
 
         if (response.error) {
-          loginErrorDisplay.textContent = `Login gagal: ${response.message}`; // Tampilkan pesan error dari API
+          loginErrorDisplay.textContent = `Login gagal: ${response.message}`;
           loginErrorDisplay.classList.remove('d-none');
         } else {
-          // Akses 'response.data.token' dan 'response.data.user' karena api.js sudah memformatnya
           UserAuth.setUserToken(response.data.token);
           if (response.data.user) {
             UserAuth.setUserData(response.data.user);
@@ -61,7 +58,7 @@ class LoginPage {
         }
       } catch (error) {
         console.error('Error saat login:', error);
-        loginErrorDisplay.textContent = 'Terjadi kesalahan saat login (jaringan/server). Silakan coba lagi.'; // Pesan error umum untuk error jaringan/tak terduga
+        loginErrorDisplay.textContent = 'Terjadi kesalahan saat login (jaringan/server). Silakan coba lagi.'; 
         loginErrorDisplay.classList.remove('d-none');
       }
     });

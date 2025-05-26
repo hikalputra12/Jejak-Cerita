@@ -1,4 +1,3 @@
-// src/scripts/data/api.js
 import CONFIG from '../config';
 
 const ENDPOINTS = {
@@ -42,8 +41,8 @@ export async function loginUser(userData) {
     const responseJson = await fetchResponse.json();
     console.log('Login API Raw Response:', responseJson);
 
-    if (!fetchResponse.ok) { // Check HTTP status for login as well
-        return { error: true, message: responseJson.message || `HTTP error! Status: ${fetchResponse.status}` };
+    if (!fetchResponse.ok) {
+      return { error: true, message: responseJson.message || `HTTP error! Status: ${fetchResponse.status}` };
     }
 
     if (!responseJson.error && responseJson.loginResult) {
@@ -75,14 +74,14 @@ export async function addNewStory(storyData, token) {
 
     const fetchResponse = await fetch(ENDPOINTS.ADD_NEW_STORY, {
       method: 'POST',
-      headers: headers, // FormData automatically sets Content-Type boundary
+      headers: headers,
       body: storyData,
     });
     const responseJson = await fetchResponse.json();
     console.log('Add New Story API Response:', responseJson);
 
     if (!fetchResponse.ok) {
-        return { error: true, message: responseJson.message || `HTTP error! Status: ${fetchResponse.status}` };
+      return { error: true, message: responseJson.message || `HTTP error! Status: ${fetchResponse.status}` };
     }
 
     return responseJson;
@@ -105,7 +104,7 @@ export async function addNewStoryWithGuestAccount(storyData) {
     console.log('Add New Story Guest API Response:', responseJson);
 
     if (!fetchResponse.ok) {
-        return { error: true, message: responseJson.message || `HTTP error! Status: ${fetchResponse.status}` };
+      return { error: true, message: responseJson.message || `HTTP error! Status: ${fetchResponse.status}` };
     }
 
     return responseJson;
@@ -129,7 +128,7 @@ export async function getAllStories(token = null) {
     console.log('Get All Stories API Response:', responseJson);
 
     if (!fetchResponse.ok) {
-        return { error: true, message: responseJson.message || `HTTP error! Status: ${fetchResponse.status}` };
+      return { error: true, message: responseJson.message || `HTTP error! Status: ${fetchResponse.status}` };
     }
 
     return responseJson;
@@ -151,7 +150,7 @@ export async function getDetailStory(id, token = null) {
     console.log('Get Detail Story API Response:', responseJson);
 
     if (!fetchResponse.ok) {
-        return { error: true, message: responseJson.message || `HTTP error! Status: ${fetchResponse.status}` };
+      return { error: true, message: responseJson.message || `HTTP error! Status: ${fetchResponse.status}` };
     }
 
     return responseJson;

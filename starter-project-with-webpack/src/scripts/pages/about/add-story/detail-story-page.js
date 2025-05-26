@@ -1,9 +1,8 @@
-// src/scripts/pages/stories/detail-story-page.js
 import { parseActivePathname } from '../../../routes/url-parser';
 import { getDetailStory } from '../../../data/api';
 import { showFormattedDate } from '../../../utils';
 import { initMap, addMarker, clearMap } from '../../../utils/map-helper';
-import UserAuth from '../../../data/user-auth'; // Import UserAuth
+import UserAuth from '../../../data/user-auth';
 
 export default class DetailStoryPage {
   async render() {
@@ -28,7 +27,7 @@ export default class DetailStoryPage {
     const storyDetailContainer = document.getElementById('story-card-content');
     const loadingIndicator = document.getElementById('loading-story-detail');
 
-    clearMap(); // Clear any existing map instances when navigating to a new detail page
+    clearMap();
 
     if (!storyId) {
       if (loadingIndicator) {
@@ -39,9 +38,9 @@ export default class DetailStoryPage {
     }
 
     try {
-      const token = UserAuth.getUserToken(); // Get the user token
+      const token = UserAuth.getUserToken();
       console.log('Fetching detail story with token:', token ? 'exists' : 'none');
-      const response = await getDetailStory(storyId, token); // Pass the token to getDetailStory
+      const response = await getDetailStory(storyId, token);
       console.log('Get Detail Story API Response:', response);
 
       if (loadingIndicator) {
@@ -75,7 +74,7 @@ export default class DetailStoryPage {
         if (story.lat && story.lon) {
           const mapInstance = initMap('detailMap', story.lat, story.lon, 13);
           addMarker(mapInstance, story.lat, story.lon, story.name);
-          mapInstance.invalidateSize(); // Ensure map renders correctly after its container is visible
+          mapInstance.invalidateSize();
         }
       } else {
         storyDetailContainer.innerHTML = '<p class="text-center">Cerita tidak ditemukan.</p>';

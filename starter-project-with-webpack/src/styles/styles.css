@@ -1,16 +1,12 @@
-/* src/styles/styles.css */
-
-/* --- Global Reset & Base Styles --- */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* Accessibility: Skip Link */
 .skip-link {
   position: absolute;
-  top: -9999px; /* Hide off-screen by default */
+  top: -9999px;
   left: 0;
   background-color: var(--color-primary);
   color: var(--color-text-light);
@@ -22,7 +18,7 @@
 }
 
 .skip-link:focus {
-  top: 0; /* Bring to screen when focused */
+  top: 0;
 }
 
 html {
@@ -36,41 +32,38 @@ body {
   line-height: 1.6;
 }
 
-/* --- Variabel Warna dan Font (Pastikan ini sudah ada dan sesuai) --- */
 :root {
-  --color-primary: #5a8d9a; /* Warna utama (misal: biru kehijauan lembut) */
-  --color-secondary: #c9e4e2; /* Warna sekunder (misal: mint lembut) */
-  --color-accent: #f0f8f7; /* Warna aksen/background terang */
-  --color-text-dark: #34495e; /* Teks gelap (misal: abu-abu kebiruan) */
-  --color-text-light: #ecf0f1; /* Teks terang */
-  --color-button-hover: #4b7a84; /* Hover untuk primary button */
-  --color-secondary-hover: #b4d2d0; /* Hover untuk secondary button */
+  --color-primary: #5a8d9a;
+  --color-secondary: #c9e4e2;
+  --color-accent: #f0f8f7;
+  --color-text-dark: #34495e;
+  --color-text-light: #ecf0f1;
+  --color-button-hover: #4b7a84;
+  --color-secondary-hover: #b4d2d0;
 
-  --font-heading: 'Poppins', sans-serif; /* Font untuk judul, bisa dari Google Fonts */
-  --font-body: 'Open Sans', sans-serif;   /* Font untuk teks, bisa dari Google Fonts */
+  --font-heading: 'Poppins', sans-serif;
+  --font-body: 'Open Sans', sans-serif;
 }
 
-
-/* MAIN HEADER & NAVIGATION */
 .container {
-  padding-inline: 16px; /* Reduced padding for smaller screens */
+  padding-inline: 16px;
   margin-inline: auto;
   max-width: 1300px;
 }
 
 header {
-  background-color: var(--color-primary); /* Changed from lightskyblue */
+  background-color: var(--color-primary);
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .main-header {
-  min-height: 70px; /* Adjusted height */
-  padding-block: 15px; /* Adjusted padding */
+  min-height: 70px;
+  padding-block: 15px;
 
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 20px; /* Adjusted gap */
+  gap: 20px;
 }
 
 .main-header .brand-name {
@@ -78,24 +71,24 @@ header {
   align-items: center;
   font-family: var(--font-heading);
   font-weight: 700;
-  font-size: 1.5rem; /* Larger font size */
+  font-size: 1.5rem;
   text-decoration: none;
-  color: var(--color-text-light); /* Light text for brand name */
+  color: var(--color-text-light);
 }
 
 .navigation-drawer {
   min-height: 100vh;
-  width: 250px; /* Slightly wider */
+  width: 250px;
   padding: 20px;
-  background-color: var(--color-accent); /* Lighter background for drawer */
+  background-color: var(--color-accent);
 
   position: fixed;
   inset-block-start: 0;
   inset-inline-start: 0;
 
-  box-shadow: 0 0 8px 4px rgba(0, 0, 0, 0.2); /* Stronger shadow */
+  box-shadow: 0 0 8px 4px rgba(0, 0, 0, 0.2);
   transform: translateX(-100%);
-  transition: transform 350ms ease-out; /* Smoother transition */
+  transition: transform 350ms ease-out;
 
   z-index: 9999;
 }
@@ -114,11 +107,12 @@ header {
 
   font-weight: bold;
   font-size: 28px;
-  color: var(--color-text-light); /* Icon color */
+  color: var(--color-text-light);
 
   cursor: pointer;
   transition: color 0.3s ease;
 }
+
 .drawer-button:hover {
   color: var(--color-secondary);
 }
@@ -127,12 +121,12 @@ header {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 15px; /* More spacing */
-  padding-top: 20px; /* Space from top of drawer */
+  gap: 15px;
+  padding-top: 20px;
 }
 
 .nav-list li a {
-  padding: 10px 15px; /* Larger clickable area */
+  padding: 10px 15px;
   display: block;
   font-size: 1.1rem;
   color: var(--color-text-dark);
@@ -151,35 +145,38 @@ header {
   display: flex;
   gap: 10px;
 }
+
 .auth-links .btn {
   font-weight: 600;
   transition: all 0.3s ease;
   border-radius: 50px;
 }
+
 .auth-links .btn-primary {
   background-color: var(--color-secondary);
   border-color: var(--color-secondary);
   color: var(--color-primary);
 }
+
 .auth-links .btn-primary:hover {
   background-color: var(--color-secondary-hover);
   border-color: var(--color-secondary-hover);
 }
+
 .auth-links .btn-secondary {
   background-color: transparent;
   border-color: var(--color-text-light);
   color: var(--color-text-light);
 }
+
 .auth-links .btn-secondary:hover {
   background-color: var(--color-text-light);
   color: var(--color-primary);
 }
 
-
-/* MAIN CONTENT */
 .main-content {
   padding-block: 20px;
-  min-height: calc(100vh - 70px - 70px); /* Adjust based on header/footer height */
+  min-height: calc(100vh - 70px - 70px);
 }
 
 .section-title {
@@ -191,7 +188,7 @@ header {
   margin-bottom: 2.5rem;
 }
 
-.section-title-alt { /* Untuk judul di bagian "Belum Login" */
+.section-title-alt {
   font-family: var(--font-heading);
   font-weight: 700;
   font-size: 2rem;
@@ -200,16 +197,15 @@ header {
   margin-bottom: 1.5rem;
 }
 
-/* Hero Section */
 .hero-section {
-  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1510414842594-a6157d22c517?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') center/cover no-repeat; /* Updated hero image */
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1510414842594-a6157d22c517?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') center/cover no-repeat;
   color: var(--color-text-light);
   text-align: center;
-  padding: 100px 0; /* Reduced padding */
+  padding: 100px 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 450px; /* Reduced min-height */
+  min-height: 450px;
 }
 
 .hero-content {
@@ -219,23 +215,23 @@ header {
 .hero-title {
   font-family: var(--font-heading);
   font-weight: 700;
-  font-size: 3rem; /* Adjusted font size */
+  font-size: 3rem;
   margin-bottom: 15px;
   line-height: 1.2;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .hero-subtitle {
   font-family: var(--font-body);
   font-weight: 400;
-  font-size: 1.3rem; /* Adjusted font size */
+  font-size: 1.3rem;
   margin-bottom: 30px;
   opacity: 0.9;
-  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .hero-content .btn {
-  padding: 10px 25px; /* Adjusted padding */
+  padding: 10px 25px;
   font-size: 1rem;
   font-weight: 600;
   border-radius: 50px;
@@ -243,31 +239,30 @@ header {
 }
 
 .hero-content .btn-primary {
-    background-color: var(--color-secondary);
-    border-color: var(--color-secondary);
-    color: var(--color-primary);
+  background-color: var(--color-secondary);
+  border-color: var(--color-secondary);
+  color: var(--color-primary);
 }
 
 .hero-content .btn-primary:hover {
-    background-color: var(--color-secondary-hover);
-    border-color: var(--color-secondary-hover);
-    transform: translateY(-2px);
+  background-color: var(--color-secondary-hover);
+  border-color: var(--color-secondary-hover);
+  transform: translateY(-2px);
 }
 
 .hero-content .btn-outline-light {
-    color: var(--color-text-light);
-    border-color: var(--color-text-light);
+  color: var(--color-text-light);
+  border-color: var(--color-text-light);
 }
 
 .hero-content .btn-outline-light:hover {
-    background-color: var(--color-text-light);
-    color: var(--color-primary);
-    transform: translateY(-2px);
+  background-color: var(--color-text-light);
+  color: var(--color-primary);
+  transform: translateY(-2px);
 }
 
-/* Latest Stories Section & All Stories Section */
 .latest-stories {
-  padding-block: 40px; /* Reduced padding */
+  padding-block: 40px;
 }
 
 .story-grid .col {
@@ -284,8 +279,7 @@ header {
   flex-direction: column;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   height: auto;
-  /* Tambahan: Tambahkan padding ke card-body untuk ruang di sekitar teks */
-  padding-bottom: 15px; /* Memberikan ruang di bawah konten kartu */
+  padding-bottom: 15px;
 }
 
 .story-card:hover {
@@ -295,10 +289,9 @@ header {
 
 .story-card-image {
   width: 100%;
-  height: 220px; /* Sedikit lebih tinggi untuk visibilitas yang lebih baik */
-  object-fit: cover; /* Pastikan gambar mengisi area tanpa distorsi */
+  height: 220px;
+  object-fit: cover;
   border-bottom: 1px solid var(--color-accent);
-  /* Tambahan: Tambahkan border-radius ke bagian atas gambar agar sesuai dengan card */
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
 }
@@ -306,14 +299,14 @@ header {
 .story-card-title {
   font-family: var(--font-heading);
   font-weight: 600;
-  font-size: 1.4rem; /* Sedikit lebih besar untuk keterbacaan */
+  font-size: 1.4rem;
   color: var(--color-primary);
   margin-bottom: 8px;
-  padding: 15px 15px 0px 15px; /* Padding di sekitar judul */
+  padding: 15px 15px 0px 15px;
 }
 
 .story-card-description {
-  font-size: 0.95rem; /* Sedikit lebih besar untuk keterbacaan */
+  font-size: 0.95rem;
   color: var(--color-text-dark);
   line-height: 1.5;
   margin-bottom: 10px;
@@ -321,13 +314,13 @@ header {
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 3; /* Sesuaikan jumlah baris jika diperlukan */
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
-  padding: 0px 15px; /* Padding di sekitar deskripsi */
+  padding: 0px 15px;
 }
 
 .story-card-meta {
-  font-size: 0.85rem; /* Lebih mudah dibaca */
+  font-size: 0.85rem;
   color: #777;
   display: flex;
   flex-wrap: wrap;
@@ -335,65 +328,65 @@ header {
   margin-top: 10px;
   padding-top: 10px;
   border-top: 1px solid var(--color-accent);
-  padding-inline: 15px; /* Padding di sekitar meta */
+  padding-inline: 15px;
 }
 
 .story-card-meta i {
-    color: var(--color-primary);
+  color: var(--color-primary);
 }
 
 .story-card-meta .btn-link {
   color: var(--color-primary);
   text-decoration: underline;
-  font-size: 0.85rem; /* Sesuaikan dengan meta */
+  font-size: 0.85rem;
   padding: 0;
   border: none;
   background: none;
   cursor: pointer;
 }
+
 .story-card-meta .btn-link:hover {
   color: var(--color-button-hover);
   text-decoration: none;
 }
 
 .story-card-actions {
-    padding-inline: 15px; /* Padding di sekitar tombol */
-    margin-top: 15px; /* Tambahkan sedikit ruang di atas tombol */
-    display: flex; /* Untuk menata tombol */
-    gap: 10px; /* Jarak antar tombol */
-    flex-wrap: wrap; /* Agar tombol wrap pada layar kecil */
+  padding-inline: 15px;
+  margin-top: 15px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 .story-card-actions .btn {
-    border-radius: 50px;
-    font-size: 0.85rem;
-    padding: 8px 18px; /* Sedikit lebih besar untuk area sentuh yang lebih baik */
-    min-width: 120px; /* Sedikit lebih lebar */
-    font-weight: 600;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  padding: 8px 18px;
+  min-width: 120px;
+  font-weight: 600;
 }
 
 .story-card-actions .btn-primary {
-    background-color: var(--color-primary);
-    border-color: var(--color-primary);
-    color: var(--color-text-light);
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-text-light);
 }
 
 .story-card-actions .btn-primary:hover {
-    background-color: var(--color-button-hover);
-    border-color: var(--color-button-hover);
+  background-color: var(--color-button-hover);
+  border-color: var(--color-button-hover);
 }
 
 .story-card-actions .btn-outline-secondary {
-    border-color: var(--color-primary); /* Ubah warna border */
-    color: var(--color-primary); /* Ubah warna teks */
+  border-color: var(--color-primary);
+  color: var(--color-primary);
 }
 
 .story-card-actions .btn-outline-secondary:hover {
-    background-color: var(--color-primary); /* Latar belakang pada hover */
-    color: var(--color-text-light); /* Teks terang pada hover */
+  background-color: var(--color-primary);
+  color: var(--color-text-light);
 }
 
-/* Not Logged In Section */
 .not-logged-in-section .card {
   background-color: var(--color-secondary);
   border: none;
@@ -403,49 +396,50 @@ header {
 }
 
 .not-logged-in-section .section-title-alt {
-    color: var(--color-primary);
-    font-size: 2.2rem;
+  color: var(--color-primary);
+  font-size: 2.2rem;
 }
 
 .not-logged-in-section .lead {
-    color: var(--color-text-dark);
-    font-size: 1.1rem;
+  color: var(--color-text-dark);
+  font-size: 1.1rem;
 }
 
 .not-logged-in-section .btn-primary {
-    background-color: var(--color-primary);
-    border-color: var(--color-primary);
-    color: var(--color-text-light);
-    font-weight: 600;
-    border-radius: 50px;
-    padding: 12px 25px;
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-text-light);
+  font-weight: 600;
+  border-radius: 50px;
+  padding: 12px 25px;
 }
 
 .not-logged-in-section .btn-primary:hover {
-    background-color: var(--color-button-hover);
-    border-color: var(--color-button-hover);
+  background-color: var(--color-button-hover);
+  border-color: var(--color-button-hover);
 }
 
 .not-logged-in-section .btn-secondary {
-    background-color: transparent;
-    border-color: var(--color-primary);
-    color: var(--color-primary);
-    font-weight: 600;
-    border-radius: 50px;
-    padding: 12px 25px;
+  background-color: transparent;
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  font-weight: 600;
+  border-radius: 50px;
+  padding: 12px 25px;
 }
 
 .not-logged-in-section .btn-secondary:hover {
-    background-color: var(--color-primary);
-    color: var(--color-text-light);
+  background-color: var(--color-primary);
+  color: var(--color-text-light);
 }
 
-/* Form Styles (Register, Login, Add Story) - Umum */
-.auth-section, .add-story-section {
+.auth-section,
+.add-story-section {
   padding-block: 60px;
 }
 
-.auth-form, .story-form {
+.auth-form,
+.story-form {
   background-color: white;
   padding: 40px;
   border-radius: 12px;
@@ -483,19 +477,21 @@ header {
   margin-top: 25px;
   text-align: center;
 }
+
 .auth-switch a {
   color: var(--color-primary);
   font-weight: 600;
 }
+
 .auth-switch a:hover {
   text-decoration: underline;
 }
 
-/* Camera & Photo Section (Add Story) */
-.camera-stream, .photo-preview {
+.camera-stream,
+.photo-preview {
   width: 100%;
-  max-height: 400px; /* Adjusted height */
-  object-fit: contain; /* Changed to contain for better preview */
+  max-height: 400px;
+  object-fit: contain;
   border: 2px solid var(--color-secondary);
   border-radius: 8px;
   margin-bottom: 20px;
@@ -503,7 +499,7 @@ header {
 
 .map-input-preview {
   width: 100%;
-  height: 350px; /* Adjusted height for consistency */
+  height: 350px;
   border: 2px solid var(--color-secondary);
   border-radius: 8px;
   margin-bottom: 15px;
@@ -518,17 +514,15 @@ header {
   margin-bottom: 20px;
 }
 
-/* Map Output Preview (for Home/Stories page) */
 .map-output-preview {
   width: 100%;
-  height: 350px; /* Ukuran yang konsisten untuk tampilan peta di kartu */
-  border: 1px solid var(--color-secondary); /* Border yang lebih lembut */
+  height: 350px;
+  border: 1px solid var(--color-secondary);
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
   margin-top: 20px;
 }
 
-/* Detail Story Page Styles */
 .detail-story-section {
   padding-block: 40px;
 }
@@ -554,11 +548,11 @@ header {
   font-weight: 700;
   color: var(--color-primary);
   margin-bottom: 15px;
-  font-size: 2.5rem; /* Adjusted size */
+  font-size: 2.5rem;
 }
 
 .story-detail-meta {
-  font-size: 0.95rem; /* Adjusted size */
+  font-size: 0.95rem;
   color: #666;
   margin-bottom: 20px;
   display: flex;
@@ -572,7 +566,7 @@ header {
 }
 
 .story-detail-description {
-  font-size: 1.05rem; /* Adjusted size */
+  font-size: 1.05rem;
   line-height: 1.8;
   color: var(--color-text-dark);
   margin-bottom: 30px;
@@ -580,26 +574,24 @@ header {
 
 .story-detail-map {
   width: 100%;
-  height: 400px; /* Adjusted height */
+  height: 400px;
   border: 1px solid var(--color-secondary);
   border-radius: 10px;
   margin-top: 20px;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.08);
 }
 
-/* Leaflet map specifics */
 .leaflet-container {
   height: 100%;
   width: 100%;
-  border-radius: inherit; /* Inherit border-radius from parent container */
+  border-radius: inherit;
 }
 
-/* Footer */
 footer {
   background-color: var(--color-primary) !important;
   color: var(--color-text-light) !important;
-  font-size: 0.9rem; /* Smaller font size */
-  padding: 20px 0; /* Added padding */
+  font-size: 0.9rem;
+  padding: 20px 0;
 }
 
 .footer-nav .list-inline-item a {
@@ -612,13 +604,12 @@ footer {
   color: var(--color-secondary) !important;
 }
 
-/* View Transition API for smooth page transitions */
 html::view-transition {
   navigation: auto;
 }
 
 html::view-transition-group(root) {
-  animation-duration: 0.4s; /* Shorter duration for quick feedback */
+  animation-duration: 0.4s;
 }
 
 html::view-transition-old(root),
@@ -641,6 +632,7 @@ html::view-transition-new(root) {
     transform: translateX(0%);
     opacity: 1;
   }
+
   to {
     transform: translateX(-100%);
     opacity: 0;
@@ -652,47 +644,58 @@ html::view-transition-new(root) {
     transform: translateX(100%);
     opacity: 0;
   }
+
   to {
     transform: translateX(0%);
     opacity: 1;
   }
 }
 
-
-/* Media Queries */
 @media (max-width: 991.98px) {
   .navbar-nav {
     text-align: center;
     margin-top: 15px;
   }
+
   .auth-links {
     flex-direction: column;
     align-items: center;
     gap: 10px;
     margin-top: 15px;
   }
+
   .navbar-nav .nav-item {
     width: 100%;
   }
+
   .navbar-nav .nav-link {
     padding: 10px 0;
   }
+
   .hero-title {
     font-size: 2.5rem;
   }
+
   .hero-subtitle {
     font-size: 1.2rem;
   }
+
   .section-title {
     font-size: 2rem;
   }
+
   .story-grid {
     grid-template-columns: 1fr;
   }
-  .auth-form, .story-form {
+
+  .auth-form,
+  .story-form {
     padding: 25px;
   }
-  .camera-stream, .photo-preview, .map-input-preview {
+
+  .camera-stream,
+  .photo-preview,
+  .map-input-preview {
     max-height: 250px;
   }
 }
@@ -702,14 +705,14 @@ html::view-transition-new(root) {
     flex-direction: row;
     margin-bottom: 0 !important;
   }
+
   .auth-links {
     margin-left: auto;
     flex-direction: row;
-    display: flex !important; /* Memastikan ini terlihat di desktop */
-    align-items: center; /* Menyelaraskan item secara vertikal */
+    display: flex !important;
+    align-items: center;
   }
 
-  /* Desktop specific nav-drawer behavior */
   .navigation-drawer {
     min-height: auto;
     width: auto;
@@ -732,9 +735,10 @@ html::view-transition-new(root) {
   .nav-list li a {
     display: inline-block;
     padding: 8px 12px;
-    color: var(--color-text-light); /* Ensure links are light on desktop header */
+    color: var(--color-text-light);
     border-radius: 4px;
   }
+
   .nav-list li a:hover {
     background-color: rgba(255, 255, 255, 0.1);
     color: var(--color-secondary);
@@ -745,38 +749,42 @@ html::view-transition-new(root) {
   }
 }
 
-/* Mobile Specific Styles (additional) */
 @media (max-width: 767.98px) {
   .hero-title {
     font-size: 2.2rem;
   }
+
   .hero-subtitle {
     font-size: 1rem;
   }
+
   .section-title {
     font-size: 1.8rem;
     margin-bottom: 1.5rem;
   }
+
   .story-detail-title {
     font-size: 2rem;
   }
+
   .story-detail-description {
     font-size: 1rem;
   }
+
   .story-detail-map {
     height: 300px;
   }
+
   .map-input-preview {
     height: 300px;
   }
 
   .story-card-actions .btn {
-    min-width: unset; /* Hapus min-width agar tombol bisa lebih fleksibel */
-    flex-grow: 1; /* Agar tombol mengisi lebar yang tersedia */
+    min-width: unset;
+    flex-grow: 1;
   }
 }
 
-/* Base styles for the student information section in AboutPage */
 .about-section .card {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
@@ -792,7 +800,6 @@ html::view-transition-new(root) {
   vertical-align: middle;
 }
 
-/* Footer Styling */
 footer {
   background-color: var(--color-primary);
   color: var(--color-text-light);
