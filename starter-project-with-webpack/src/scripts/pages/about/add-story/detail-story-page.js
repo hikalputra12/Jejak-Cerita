@@ -2,7 +2,7 @@
 import { parseActivePathname } from '../../../routes/url-parser';
 import { getDetailStory } from '../../../data/api';
 import { showFormattedDate } from '../../../utils';
-import { initMap, addMarker, clearMap } from '../../../utils/map-helper'; // Import map helper functions
+import { initMap, addMarker, clearMap } from '../../../utils/map-helper';
 
 export default class DetailStoryPage {
   async render() {
@@ -25,7 +25,6 @@ export default class DetailStoryPage {
     const storyDetailContainer = document.getElementById('story-card-content');
     const loadingIndicator = document.getElementById('loading-story-detail');
 
-    // Clear any existing map instances on the page before rendering new content
     clearMap();
 
     if (!storyId) {
@@ -45,7 +44,7 @@ export default class DetailStoryPage {
 
       if (response.error) {
         storyDetailContainer.innerHTML = `<p class="text-danger text-center">Gagal memuat cerita: ${response.message}</p>`;
-      } else if (response.data && response.data.story) {
+      } else if (response.data && response.data.story) { // Sesuaikan dengan struktur API yang mengembalikan { data: { story: ... } }
         const story = response.data.story;
         const photoAltText = story.description ? `Gambar cerita: ${story.description.substring(0, 50)}...` : 'Gambar cerita';
 

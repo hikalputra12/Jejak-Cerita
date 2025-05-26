@@ -1,15 +1,14 @@
 // src/scripts/pages/home/home-page.js
-import UserAuth from '../../data/user-auth'; // Import UserAuth untuk mengecek status login
-import { getAllStories } from '../../data/api'; // Import fungsi untuk mengambil cerita
-import { showFormattedDate } from '../../utils'; // Import untuk format tanggal
+import UserAuth from '../../data/user-auth';
+import { getAllStories } from '../../data/api';
+import { showFormattedDate } from '../../utils';
 
 export default class HomePage {
   async render() {
-    const isAuthenticated = UserAuth.isAuthenticated(); // Cek status login
+    const isAuthenticated = UserAuth.isAuthenticated();
     let storyListHtml = '';
 
     if (isAuthenticated) {
-      // Jika sudah login, tampilkan bagian untuk daftar cerita
       storyListHtml = `
         <section class="latest-stories container my-5">
           <h2 class="section-title">Jejak Cerita Terbaru</h2>
@@ -19,7 +18,6 @@ export default class HomePage {
         </section>
       `;
     } else {
-      // Jika belum login, tampilkan pesan atau ajakan untuk login
       storyListHtml = `
         <section class="not-logged-in-section container my-5 text-center">
           <div class="card shadow-sm p-5 bg-white">
@@ -57,15 +55,18 @@ export default class HomePage {
       const loadingIndicator = document.getElementById('loading-stories');
 
       try {
-        const stories = await getAllStories(); // Ambil semua cerita
+        const token = UserAuth.getUserToken(); // Dapatkan token pengguna
+        const storiesResponse = await getAllStories(token); // Kirim token ke API
 
         if (loadingIndicator) {
-          loadingIndicator.remove(); // Hapus indikator loading
+          loadingIndicator.remove();
         }
 
-        if (stories && stories.data && stories.data.length > 0) {
-          storyListContainer.innerHTML = ''; // Kosongkan container sebelum mengisi
-          stories.data.forEach(story => {
+        if (storiesResponse.error) { // Tangani error dari API
+            storyListContainer.innerHTML = `<p class="text-danger text-center w-100">Gagal memuat cerita: ${storiesResponse.message}</p>`;
+        } else if (storiesResponse.data && storiesResponse.data.listStory && storiesResponse.data.listStory.length > 0) { // Sesuaikan dengan struktur API
+          storyListContainer.innerHTML = '';
+          storiesResponse.data.listStory.forEach(story => { // Iterasi melalui listStory
             const storyCard = `
               <div class="col">
                 <article class="story-card h-100">
@@ -79,7 +80,7 @@ export default class HomePage {
                     </div>
                     <div class="story-card-actions mt-3">
                         <a href="#/stories/${story.id}" class="btn btn-primary btn-sm rounded-pill"><i class="fas fa-eye me-1"></i>Baca Selengkapnya</a>
-                        ${story.lat && story.lon ? `<button class="btn btn-outline-secondary btn-sm rounded-pill" data-lat="${story.lat}" data-lon="${story.lon}"><i class="fas fa-map-marker-alt me-1"></i>Lihat di Peta</button>` : ''}
+                        ${story.lat && story.lon ? `<button class="btn btn-outline-secondary btn-sm rounded-pill" data-lat="${story.lat}" data-lon="${story.lon}" data-story-id="${story.id}" data-name="${story.name}"><i class="fas fa-map-marker-alt me-1"></i>Lihat di Peta</button>` : ''}
                     </div>
                   </div>
                 </article>
@@ -93,8 +94,12 @@ export default class HomePage {
             button.addEventListener('click', (event) => {
               const lat = event.target.dataset.lat;
               const lon = event.target.dataset.lon;
+              const storyId = event.target.dataset.storyId;
+              const storyName = event.target.dataset.name;
               // Redirect atau tampilkan modal peta
-              alert(`Arahkan ke peta di Lat: ${lat}, Lon: ${lon}`); // Ini hanya contoh, Anda bisa mengarahkan ke halaman detail atau modal peta
+              alert(`Arahkan ke peta di Lat: ${lat}, Lon: ${lon} untuk cerita ${storyName}`);
+              // Di sini Anda bisa mengarahkan ke halaman detail cerita atau memunculkan modal peta
+              window.location.hash = `#/stories/${storyId}`; // Contoh: arahkan ke halaman detail
             });
           });
 
@@ -110,6 +115,5 @@ export default class HomePage {
         storyListContainer.innerHTML = '<p class="text-danger text-center w-100">Gagal memuat cerita. Silakan coba lagi nanti.</p>';
       }
     }
-    // Jika belum login, afterRender untuk bagian storyListHtml tidak perlu melakukan apa-apa.
   }
 }

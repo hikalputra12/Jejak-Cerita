@@ -2,7 +2,7 @@
 import { getAllStories } from '../../../data/api';
 import { showFormattedDate } from '../../../utils';
 import { clearMap, showMap } from '../../../utils/map-helper';
-import UserAuth from '../../../data/user-auth'; // Import UserAuth
+import UserAuth from '../../../data/user-auth';
 
 export default class StoriesPage {
   async render() {
@@ -20,22 +20,21 @@ export default class StoriesPage {
     const storyListContainer = document.getElementById('all-story-list-container');
     const loadingIndicator = document.getElementById('loading-all-stories');
 
-    // Clear any existing map instances on the page before rendering new content
-    clearMap();
+    clearMap(); // Clear any existing map instances on the page before rendering new content
 
     try {
-      const token = UserAuth.getUserToken(); // Ambil token pengguna
-      const response = await getAllStories(token); // Kirim token saat mengambil cerita
+      const token = UserAuth.getUserToken();
+      const storiesResponse = await getAllStories(token); // Kirim token saat mengambil cerita
 
       if (loadingIndicator) {
         loadingIndicator.remove();
       }
 
-      if (response.error) {
-        storyListContainer.innerHTML = `<p class="text-danger text-center w-100">Gagal memuat cerita: ${response.message}</p>`;
-      } else if (response.data && response.data.length > 0) {
-        storyListContainer.innerHTML = ''; // Clear container before filling
-        response.data.forEach(story => {
+      if (storiesResponse.error) { // Tangani error dari API
+        storyListContainer.innerHTML = `<p class="text-danger text-center w-100">Gagal memuat cerita: ${storiesResponse.message}</p>`;
+      } else if (storiesResponse.data && storiesResponse.data.listStory && storiesResponse.data.listStory.length > 0) { // Sesuaikan dengan struktur API
+        storyListContainer.innerHTML = '';
+        storiesResponse.data.listStory.forEach(story => { // Iterasi melalui listStory
           const photoAltText = story.description ? `Gambar cerita: ${story.description.substring(0, 50)}...` : 'Gambar cerita';
 
           const storyCard = `
@@ -51,7 +50,7 @@ export default class StoriesPage {
                     ${story.lat && story.lon ? `
                       <span class="story-card-location">
                         <i class="fas fa-map-marker-alt me-1"></i>
-                        <button class="btn-link view-on-map-button" data-lat="${story.lat}" data-lon="${story.lon}" data-name="${story.name}" aria-label="Lihat lokasi cerita ${story.name} di peta">Lihat di Peta</button>
+                        <button class="btn-link view-on-map-button" data-lat="${story.lat}" data-lon="${story.lon}" data-name="${story.name}" data-story-id="${story.id}" aria-label="Lihat lokasi cerita ${story.name} di peta">Lihat di Peta</button>
                       </span>
                     ` : ''}
                   </div>
@@ -64,14 +63,13 @@ export default class StoriesPage {
           `;
           storyListContainer.innerHTML += storyCard;
 
-          // Add a container for the map after each story card, but initially hidden
           if (story.lat && story.lon) {
               const mapContainerId = `map-story-${story.id}`;
-              storyListContainer.innerHTML += `
-                  <div class="col-12 mt-3 mb-5">
-                      <div id="${mapContainerId}" class="map-output-preview d-none"></div>
-                  </div>
-              `;
+              // Tambahkan elemen map di dalam card, sehingga mudah di-toggle
+              const mapPlaceholder = document.createElement('div');
+              mapPlaceholder.className = 'col-12 mt-3 mb-5';
+              mapPlaceholder.innerHTML = `<div id="${mapContainerId}" class="map-output-preview d-none"></div>`;
+              storyListContainer.appendChild(mapPlaceholder);
           }
         });
 
@@ -81,17 +79,15 @@ export default class StoriesPage {
             const lat = parseFloat(event.target.dataset.lat);
             const lon = parseFloat(event.target.dataset.lon);
             const name = event.target.dataset.name;
-            // Get the story ID from the nearest story-card's read-more link
-            const storyId = event.target.closest('.story-card').querySelector('a[href^="#/stories/"]').getAttribute('href').split('/').pop();
+            const storyId = event.target.dataset.storyId; // Gunakan storyId dari dataset
             const mapContainer = document.getElementById(`map-story-${storyId}`);
 
-            // Toggle visibility of the map container
             if (mapContainer.classList.contains('d-none')) {
               mapContainer.classList.remove('d-none');
               showMap(mapContainer.id, lat, lon, name);
             } else {
               mapContainer.classList.add('d-none');
-              clearMap(mapContainer.id); // Clear map if hidden
+              clearMap(mapContainer.id);
             }
           });
         });

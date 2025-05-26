@@ -52,10 +52,10 @@ export async function addNewStory(storyData, token) {
   const fetchResponse = await fetch(ENDPOINTS.ADD_NEW_STORY, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
+      // 'Content-Type': 'application/json', // FormData tidak memerlukan Content-Type ini
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(storyData),
+    body: storyData, // Mengirimkan FormData secara langsung
   });
   return await fetchResponse.json();
 }
@@ -69,8 +69,12 @@ export async function addNewStoryWithGuestAccount(storyData) {
   });
   return await fetchResponse.json();
 }
-export async function getAllStories() {
-  const fetchResponse = await fetch(ENDPOINTS.GET_ALL_STORIES);
+export async function getAllStories(token = null) { // Tambahkan parameter token
+  const headers = {};
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+  const fetchResponse = await fetch(ENDPOINTS.GET_ALL_STORIES, { headers }); // Kirim headers dengan token
   return await fetchResponse.json();
 }
 export async function getDetailStory(id) {

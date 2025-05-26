@@ -1,7 +1,7 @@
 // src/scripts/pages/add-story/add-story-page.js
-import { addNewStory } from '../../../data/api';
+import { addNewStory } from '../../../data/api'; // Menggunakan addNewStory dari API
 import UserAuth from '../../../data/user-auth';
-import { initMap, setMapClickListener, clearMap, addMarker, setupGeolocation } from '../../../utils/map-helper'; // Import map helper
+import { initMap, setMapClickListener, clearMap, addMarker, setupGeolocation } from '../../../utils/map-helper';
 
 export default class AddStoryPage {
   async render() {
@@ -45,16 +45,14 @@ export default class AddStoryPage {
     let currentLon = null;
     let mapInstance = null;
 
-    // Redirect if not authenticated
     if (!UserAuth.isAuthenticated()) {
       alert('Anda harus login untuk menambahkan cerita.');
       window.location.hash = '#/login';
       return;
     }
 
-    // Initialize map and try to get geolocation
-    mapInstance = initMap('mapInputPreview', -6.2, 106.816666, 13); // Default to Jakarta, Indonesia
-    setupGeolocation(mapInstance, latitudeInput, longitudeInput, mapCoordinates); // Try to get current location
+    mapInstance = initMap('mapInputPreview', -6.2, 106.816666, 13);
+    setupGeolocation(mapInstance, latitudeInput, longitudeInput, mapCoordinates);
 
     setMapClickListener(mapInstance, (lat, lon) => {
       currentLat = lat;
@@ -63,11 +61,10 @@ export default class AddStoryPage {
       longitudeInput.value = lon;
       mapCoordinates.textContent = `Lat: ${lat.toFixed(6)}, Lon: ${lon.toFixed(6)}`;
 
-      clearMap(mapInstance); // Clear previous markers
+      clearMap(mapInstance);
       addMarker(mapInstance, lat, lon, 'Lokasi Cerita Anda');
     });
 
-    // Handle photo input change (for preview)
     storyPhotoInput.addEventListener('change', (event) => {
       const file = event.target.files[0];
       if (file) {
@@ -83,7 +80,6 @@ export default class AddStoryPage {
       }
     });
 
-    // Handle form submission
     addStoryForm.addEventListener('submit', async (event) => {
       event.preventDefault();
 
@@ -105,19 +101,13 @@ export default class AddStoryPage {
       }
 
       try {
-        const response = await fetch('https://story-api.dicoding.dev/v1/stories', {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          body: formData,
-        }).then(res => res.json());
+        const response = await addNewStory(formData, token); // Panggil addNewStory dari api.js
 
         if (response.error) {
           alert(`Gagal menambahkan cerita: ${response.message}`);
         } else {
           alert('Cerita berhasil ditambahkan!');
-          window.location.hash = '#/'; // Redirect to home or stories page
+          window.location.hash = '#/';
           if (document.startViewTransition) {
             document.startViewTransition(() => {
               window.location.reload();
