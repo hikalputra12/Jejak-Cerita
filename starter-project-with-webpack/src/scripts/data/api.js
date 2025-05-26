@@ -22,7 +22,7 @@ export async function registerUser(userData) {
       body: JSON.stringify(userData),
     });
     const responseJson = await fetchResponse.json();
-    console.log('Register API Response:', responseJson); // Debugging
+    console.log('Register API Response:', responseJson);
     return responseJson;
   } catch (error) {
     console.error('Error during registration API call:', error);
@@ -40,7 +40,11 @@ export async function loginUser(userData) {
       body: JSON.stringify(userData),
     });
     const responseJson = await fetchResponse.json();
-    console.log('Login API Raw Response:', responseJson); // Debugging
+    console.log('Login API Raw Response:', responseJson);
+
+    if (!fetchResponse.ok) { // Check HTTP status for login as well
+        return { error: true, message: responseJson.message || `HTTP error! Status: ${fetchResponse.status}` };
+    }
 
     if (!responseJson.error && responseJson.loginResult) {
       return {
@@ -75,7 +79,12 @@ export async function addNewStory(storyData, token) {
       body: storyData,
     });
     const responseJson = await fetchResponse.json();
-    console.log('Add New Story API Response:', responseJson); // Debugging
+    console.log('Add New Story API Response:', responseJson);
+
+    if (!fetchResponse.ok) {
+        return { error: true, message: responseJson.message || `HTTP error! Status: ${fetchResponse.status}` };
+    }
+
     return responseJson;
   } catch (error) {
     console.error('Error during add new story API call:', error);
@@ -93,7 +102,12 @@ export async function addNewStoryWithGuestAccount(storyData) {
       body: JSON.stringify(storyData),
     });
     const responseJson = await fetchResponse.json();
-    console.log('Add New Story Guest API Response:', responseJson); // Debugging
+    console.log('Add New Story Guest API Response:', responseJson);
+
+    if (!fetchResponse.ok) {
+        return { error: true, message: responseJson.message || `HTTP error! Status: ${fetchResponse.status}` };
+    }
+
     return responseJson;
   } catch (error) {
     console.error('Error during add new story as guest API call:', error);
@@ -107,14 +121,14 @@ export async function getAllStories(token = null) {
     if (token) {
       headers['Authorization'] = `Bearer ${token}`;
     } else {
-      console.warn('getAllStories called without a token. This might limit results or cause errors if API requires auth.'); // Debugging
+      console.warn('getAllStories called without a token. This might limit results or cause errors if API requires auth.');
     }
 
     const fetchResponse = await fetch(ENDPOINTS.GET_ALL_STORIES, { headers });
     const responseJson = await fetchResponse.json();
-    console.log('Get All Stories API Response:', responseJson); // Debugging
+    console.log('Get All Stories API Response:', responseJson);
 
-    if (!fetchResponse.ok) { // Cek status HTTP response
+    if (!fetchResponse.ok) {
         return { error: true, message: responseJson.message || `HTTP error! Status: ${fetchResponse.status}` };
     }
 
@@ -125,13 +139,18 @@ export async function getAllStories(token = null) {
   }
 }
 
-export async function getDetailStory(id) {
+export async function getDetailStory(id, token = null) {
   try {
-    const fetchResponse = await fetch(ENDPOINTS.DETAIL_STORY.replace(':id', id));
-    const responseJson = await fetchResponse.json();
-    console.log('Get Detail Story API Response:', responseJson); // Debugging
+    const headers = {};
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
 
-    if (!fetchResponse.ok) { // Cek status HTTP response
+    const fetchResponse = await fetch(ENDPOINTS.DETAIL_STORY.replace(':id', id), { headers });
+    const responseJson = await fetchResponse.json();
+    console.log('Get Detail Story API Response:', responseJson);
+
+    if (!fetchResponse.ok) {
         return { error: true, message: responseJson.message || `HTTP error! Status: ${fetchResponse.status}` };
     }
 
@@ -153,7 +172,7 @@ export async function subscribeNotification(subscription, token) {
       body: JSON.stringify(subscription),
     });
     const responseJson = await fetchResponse.json();
-    console.log('Subscribe Notification API Response:', responseJson); // Debugging
+    console.log('Subscribe Notification API Response:', responseJson);
     return responseJson;
   } catch (error) {
     console.error('Error during subscribe notification API call:', error);
@@ -172,7 +191,7 @@ export async function unsubscribeNotification(endpoint, token) {
       body: JSON.stringify({ endpoint }),
     });
     const responseJson = await fetchResponse.json();
-    console.log('Unsubscribe Notification API Response:', responseJson); // Debugging
+    console.log('Unsubscribe Notification API Response:', responseJson);
     return responseJson;
   } catch (error) {
     console.error('Error during unsubscribe notification API call:', error);

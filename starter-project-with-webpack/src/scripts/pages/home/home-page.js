@@ -1,11 +1,11 @@
 // src/scripts/pages/home/home-page.js
-import UserAuth from '../../data/user-auth'; //
-import { getAllStories } from '../../data/api'; //
-import { showFormattedDate } from '../../utils'; //
+import UserAuth from '../../data/user-auth';
+import { getAllStories } from '../../data/api';
+import { showFormattedDate } from '../../utils';
 
 export default class HomePage {
   async render() {
-    const isAuthenticated = UserAuth.isAuthenticated(); //
+    const isAuthenticated = UserAuth.isAuthenticated();
     let storyListHtml = '';
 
     if (isAuthenticated) {
@@ -48,27 +48,26 @@ export default class HomePage {
   }
 
   async afterRender() {
-    const isAuthenticated = UserAuth.isAuthenticated(); //
+    const isAuthenticated = UserAuth.isAuthenticated();
 
     if (isAuthenticated) {
       const storyListContainer = document.getElementById('story-list-container');
       const loadingIndicator = document.getElementById('loading-stories');
 
       try {
-        const token = UserAuth.getUserToken(); // Dapatkan token pengguna
-        console.log('Fetching stories for HomePage with token:', token ? 'exists' : 'none'); // Debugging
-        const storiesResponse = await getAllStories(token); // Kirim token ke API
+        const token = UserAuth.getUserToken();
+        console.log('Fetching stories for HomePage with token:', token ? 'exists' : 'none');
+        const storiesResponse = await getAllStories(token);
 
         if (loadingIndicator) {
           loadingIndicator.remove();
         }
 
-        if (storiesResponse.error) { // Tangani error dari API
+        if (storiesResponse.error) {
             storyListContainer.innerHTML = `<p class="text-danger text-center w-100">Gagal memuat cerita: ${storiesResponse.message}</p>`;
-        } else if (storiesResponse.listStory && storiesResponse.listStory.length > 0) { // Sesuaikan dengan struktur API
-          // Perubahan: Langsung akses listStory jika API mengembalikan { error: false, message: "...", listStory: [...] }
+        } else if (storiesResponse.listStory && storiesResponse.listStory.length > 0) {
           storyListContainer.innerHTML = '';
-          storiesResponse.listStory.forEach(story => { // Iterasi melalui listStory
+          storiesResponse.listStory.forEach(story => {
             const photoAltText = story.description ? `Gambar cerita: ${story.description.substring(0, 50)}...` : 'Gambar cerita';
 
             const storyCard = `
@@ -84,7 +83,7 @@ export default class HomePage {
                     </div>
                     <div class="story-card-actions mt-3">
                         <a href="#/stories/${story.id}" class="btn btn-primary btn-sm rounded-pill"><i class="fas fa-eye me-1"></i>Baca Selengkapnya</a>
-                        ${story.lat && story.lon ? `<button class="btn btn-outline-secondary btn-sm rounded-pill" data-lat="${story.lat}" data-lon="${story.lon}" data-story-id="${story.id}" data-name="${story.name}"><i class="fas fa-map-marker-alt me-1"></i>Lihat di Peta</button>` : ''}
+                        ${story.lat && story.lon ? `<a href="#/stories/${story.id}" class="btn btn-outline-secondary btn-sm rounded-pill" data-lat="${story.lat}" data-lon="${story.lon}" data-story-id="${story.id}" data-name="${story.name}"><i class="fas fa-map-marker-alt me-1"></i>Lihat di Peta</a>` : ''}
                     </div>
                   </div>
                 </article>
@@ -93,17 +92,17 @@ export default class HomePage {
             storyListContainer.innerHTML += storyCard;
           });
 
-          // Tambahkan event listener untuk tombol "Lihat di Peta" (jika ada)
+          // Remove the event listener for "Lihat di Peta" button, as the primary action is "Baca Selengkapnya"
+          // and the map is shown on the detail page.
+          // If you still want a separate "Lihat di Peta" button that does something else,
+          // you would need a different approach (e.g., a modal with a map).
+          // For now, we'll make both buttons lead to the detail page.
           storyListContainer.querySelectorAll('.btn-outline-secondary').forEach(button => {
             button.addEventListener('click', (event) => {
-              const lat = event.target.dataset.lat;
-              const lon = event.target.dataset.lon;
-              const storyId = event.target.dataset.storyId;
-              const storyName = event.target.dataset.name;
-              // Redirect atau tampilkan modal peta
-              alert(`Arahkan ke peta di Lat: ${lat}, Lon: ${lon} untuk cerita ${storyName}`);
-              // Di sini Anda bisa mengarahkan ke halaman detail cerita atau memunculkan modal peta
-              window.location.hash = `#/stories/${storyId}`; // Contoh: arahkan ke halaman detail
+              // The href attribute already handles navigation. This prevents any alert from appearing.
+              event.preventDefault(); // Prevent default link behavior if you want custom logic
+              const storyId = event.currentTarget.dataset.storyId; // Use currentTarget to get the button itself
+              window.location.hash = `#/stories/${storyId}`;
             });
           });
 

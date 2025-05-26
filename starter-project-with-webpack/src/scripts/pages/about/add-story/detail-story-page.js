@@ -3,6 +3,7 @@ import { parseActivePathname } from '../../../routes/url-parser';
 import { getDetailStory } from '../../../data/api';
 import { showFormattedDate } from '../../../utils';
 import { initMap, addMarker, clearMap } from '../../../utils/map-helper';
+import UserAuth from '../../../data/user-auth'; // Import UserAuth
 
 export default class DetailStoryPage {
   async render() {
@@ -22,10 +23,12 @@ export default class DetailStoryPage {
 
   async afterRender() {
     const { id: storyId } = parseActivePathname();
+    console.log('Extracted storyId for detail page:', storyId);
+
     const storyDetailContainer = document.getElementById('story-card-content');
     const loadingIndicator = document.getElementById('loading-story-detail');
 
-    clearMap();
+    clearMap(); // Clear any existing map instances when navigating to a new detail page
 
     if (!storyId) {
       if (loadingIndicator) {
@@ -36,7 +39,10 @@ export default class DetailStoryPage {
     }
 
     try {
-      const response = await getDetailStory(storyId);
+      const token = UserAuth.getUserToken(); // Get the user token
+      console.log('Fetching detail story with token:', token ? 'exists' : 'none');
+      const response = await getDetailStory(storyId, token); // Pass the token to getDetailStory
+      console.log('Get Detail Story API Response:', response);
 
       if (loadingIndicator) {
         loadingIndicator.remove();
@@ -44,8 +50,10 @@ export default class DetailStoryPage {
 
       if (response.error) {
         storyDetailContainer.innerHTML = `<p class="text-danger text-center">Gagal memuat cerita: ${response.message}</p>`;
-      } else if (response.data && response.data.story) { // Sesuaikan dengan struktur API yang mengembalikan { data: { story: ... } }
+      } else if (response.data && response.data.story) {
         const story = response.data.story;
+        console.log('Detail Story data:', story);
+
         const photoAltText = story.description ? `Gambar cerita: ${story.description.substring(0, 50)}...` : 'Gambar cerita';
 
         storyDetailContainer.innerHTML = `
@@ -67,6 +75,7 @@ export default class DetailStoryPage {
         if (story.lat && story.lon) {
           const mapInstance = initMap('detailMap', story.lat, story.lon, 13);
           addMarker(mapInstance, story.lat, story.lon, story.name);
+          mapInstance.invalidateSize(); // Ensure map renders correctly after its container is visible
         }
       } else {
         storyDetailContainer.innerHTML = '<p class="text-center">Cerita tidak ditemukan.</p>';
