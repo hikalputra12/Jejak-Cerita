@@ -202,7 +202,7 @@ header {
 
 /* Hero Section */
 .hero-section {
-  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://source.unsplash.com/random/1600x600/?travel,landscape,adventure,story') center/cover no-repeat;
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1510414842594-a6157d22c517?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D') center/cover no-repeat; /* Updated hero image */
   color: var(--color-text-light);
   text-align: center;
   padding: 100px 0; /* Reduced padding */
@@ -774,4 +774,27 @@ html::view-transition-new(root) {
     min-width: unset; /* Hapus min-width agar tombol bisa lebih fleksibel */
     flex-grow: 1; /* Agar tombol mengisi lebar yang tersedia */
   }
+}
+
+/* Base styles for the student information section in AboutPage */
+.about-section .card {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.about-section .card:hover {
+  transform: translateY(-5px);
+}
+
+.about-section .list-unstyled li i {
+  font-size: 1.2rem;
+  vertical-align: middle;
+}
+
+/* Footer Styling */
+footer {
+  background-color: var(--color-primary);
+  color: var(--color-text-light);
+  padding: 25px 0;
 }

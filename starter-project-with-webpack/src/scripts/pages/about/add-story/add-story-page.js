@@ -18,6 +18,7 @@ export default class AddStoryPage {
             <label for="storyPhoto" class="form-label">Unggah Foto (dari Kamera/Galeri) <span class="required">*</span></label>
             <input type="file" class="form-control" id="storyPhoto" name="photo" accept="image/*" capture="environment" required aria-label="Unggah foto cerita">
             <img id="photoPreview" class="photo-preview mt-3 d-none img-fluid" src="#" alt="Pratinjau Foto" />
+            <small id="photoError" class="text-danger d-none">Gagal memuat pratinjau gambar. Pastikan file valid.</small>
           </div>
 
           <div class="form-group mb-4">
@@ -38,6 +39,7 @@ export default class AddStoryPage {
     const addStoryForm = document.getElementById('addStoryForm');
     const storyPhotoInput = document.getElementById('storyPhoto');
     const photoPreview = document.getElementById('photoPreview');
+    const photoErrorDisplay = document.getElementById('photoError');
     const latitudeInput = document.getElementById('latitudeInput');
     const longitudeInput = document.getElementById('longitudeInput');
     const mapCoordinates = document.getElementById('mapCoordinates');
@@ -51,7 +53,11 @@ export default class AddStoryPage {
       return;
     }
 
+    // Inisialisasi peta setelah elemennya ada di DOM
     mapInstance = initMap('mapInputPreview', -6.2, 106.816666, 13);
+    mapInstance.invalidateSize(); // Penting untuk memastikan peta dirender dengan benar
+
+    // Setup geolokasi (jika diizinkan dan didukung)
     setupGeolocation(mapInstance, latitudeInput, longitudeInput, mapCoordinates);
 
     setMapClickListener(mapInstance, (lat, lon) => {
@@ -68,15 +74,23 @@ export default class AddStoryPage {
     storyPhotoInput.addEventListener('change', (event) => {
       const file = event.target.files[0];
       if (file) {
+        photoErrorDisplay.classList.add('d-none'); // Sembunyikan error sebelumnya
         const reader = new FileReader();
         reader.onload = (e) => {
           photoPreview.src = e.target.result;
           photoPreview.classList.remove('d-none');
         };
+        reader.onerror = () => {
+          photoErrorDisplay.textContent = 'Gagal memuat pratinjau gambar. Format tidak didukung atau rusak.';
+          photoErrorDisplay.classList.remove('d-none');
+          photoPreview.classList.add('d-none');
+          photoPreview.src = '#'; // Reset src
+        };
         reader.readAsDataURL(file);
       } else {
         photoPreview.classList.add('d-none');
         photoPreview.src = '#';
+        photoErrorDisplay.classList.add('d-none');
       }
     });
 
