@@ -50,7 +50,7 @@ export default class AboutPage {
             <div class="row justify-content-center mb-4">
               <div class="col-md-6 col-lg-4 mb-3">
                 <div class="card h-100 shadow-sm text-center p-3">
-                  <img src="../foto-developer.png" alt="Foto Developer Utama" class="img-fluid rounded-circle mx-auto d-block mb-3 border border-3 border-primary">
+                  <img src="../foto-developer.jpeg" alt="Foto Developer Utama" class="img-fluid rounded-circle mx-auto d-block mb-3 border border-3 border-primary">
                   <h3 class="h5 card-title">Julianda Putra Mansur</h3>
                   <p class="text-muted">Pengembang Utama</p>
                   <p class="card-text">Berkomitmen untuk menciptakan pengalaman berbagi cerita yang mulus dan bermakna.</p>
