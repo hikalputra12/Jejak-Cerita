@@ -1,11 +1,11 @@
 // src/scripts/pages/home/home-page.js
-import UserAuth from '../../data/user-auth';
-import { getAllStories } from '../../data/api';
-import { showFormattedDate } from '../../utils';
+import UserAuth from '../../data/user-auth'; //
+import { getAllStories } from '../../data/api'; //
+import { showFormattedDate } from '../../utils'; //
 
 export default class HomePage {
   async render() {
-    const isAuthenticated = UserAuth.isAuthenticated();
+    const isAuthenticated = UserAuth.isAuthenticated(); //
     let storyListHtml = '';
 
     if (isAuthenticated) {
@@ -48,7 +48,7 @@ export default class HomePage {
   }
 
   async afterRender() {
-    const isAuthenticated = UserAuth.isAuthenticated();
+    const isAuthenticated = UserAuth.isAuthenticated(); //
 
     if (isAuthenticated) {
       const storyListContainer = document.getElementById('story-list-container');
@@ -56,6 +56,7 @@ export default class HomePage {
 
       try {
         const token = UserAuth.getUserToken(); // Dapatkan token pengguna
+        console.log('Fetching stories for HomePage with token:', token ? 'exists' : 'none'); // Debugging
         const storiesResponse = await getAllStories(token); // Kirim token ke API
 
         if (loadingIndicator) {
@@ -64,13 +65,16 @@ export default class HomePage {
 
         if (storiesResponse.error) { // Tangani error dari API
             storyListContainer.innerHTML = `<p class="text-danger text-center w-100">Gagal memuat cerita: ${storiesResponse.message}</p>`;
-        } else if (storiesResponse.data && storiesResponse.data.listStory && storiesResponse.data.listStory.length > 0) { // Sesuaikan dengan struktur API
+        } else if (storiesResponse.listStory && storiesResponse.listStory.length > 0) { // Sesuaikan dengan struktur API
+          // Perubahan: Langsung akses listStory jika API mengembalikan { error: false, message: "...", listStory: [...] }
           storyListContainer.innerHTML = '';
-          storiesResponse.data.listStory.forEach(story => { // Iterasi melalui listStory
+          storiesResponse.listStory.forEach(story => { // Iterasi melalui listStory
+            const photoAltText = story.description ? `Gambar cerita: ${story.description.substring(0, 50)}...` : 'Gambar cerita';
+
             const storyCard = `
               <div class="col">
                 <article class="story-card h-100">
-                  <img src="${story.photoUrl}" alt="Foto cerita: ${story.description.substring(0, 50)}..." class="story-card-image" loading="lazy">
+                  <img src="${story.photoUrl}" alt="${photoAltText}" class="story-card-image" loading="lazy">
                   <div class="card-body d-flex flex-column">
                     <h3 class="story-card-title card-title">${story.name || 'Cerita Tanpa Judul'}</h3>
                     <p class="story-card-description card-text">${story.description.substring(0, 150)}${story.description.length > 150 ? '...' : ''}</p>
@@ -108,7 +112,7 @@ export default class HomePage {
         }
 
       } catch (error) {
-        console.error('Error fetching stories:', error);
+        console.error('Error fetching stories for Home Page:', error);
         if (loadingIndicator) {
           loadingIndicator.remove();
         }

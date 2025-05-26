@@ -1,8 +1,8 @@
-// src/scripts/pages/stories/stories-page.js
-import { getAllStories } from '../../../data/api';
-import { showFormattedDate } from '../../../utils';
-import { clearMap, showMap } from '../../../utils/map-helper';
-import UserAuth from '../../../data/user-auth';
+// src/scripts/pages/about/add-story/stories-page.js
+import { getAllStories } from '../../../data/api'; //
+import { showFormattedDate } from '../../../utils'; //
+import { clearMap, showMap } from '../../../utils/map-helper'; //
+import UserAuth from '../../../data/user-auth'; //
 
 export default class StoriesPage {
   async render() {
@@ -23,7 +23,8 @@ export default class StoriesPage {
     clearMap(); // Clear any existing map instances on the page before rendering new content
 
     try {
-      const token = UserAuth.getUserToken();
+      const token = UserAuth.getUserToken(); // Dapatkan token pengguna
+      console.log('Fetching stories for StoriesPage with token:', token ? 'exists' : 'none'); // Debugging
       const storiesResponse = await getAllStories(token); // Kirim token saat mengambil cerita
 
       if (loadingIndicator) {
@@ -32,9 +33,10 @@ export default class StoriesPage {
 
       if (storiesResponse.error) { // Tangani error dari API
         storyListContainer.innerHTML = `<p class="text-danger text-center w-100">Gagal memuat cerita: ${storiesResponse.message}</p>`;
-      } else if (storiesResponse.data && storiesResponse.data.listStory && storiesResponse.data.listStory.length > 0) { // Sesuaikan dengan struktur API
+      } else if (storiesResponse.listStory && storiesResponse.listStory.length > 0) { // Sesuaikan dengan struktur API
+        // Perubahan: Langsung akses listStory jika API mengembalikan { error: false, message: "...", listStory: [...] }
         storyListContainer.innerHTML = '';
-        storiesResponse.data.listStory.forEach(story => { // Iterasi melalui listStory
+        storiesResponse.listStory.forEach(story => { // Iterasi melalui listStory
           const photoAltText = story.description ? `Gambar cerita: ${story.description.substring(0, 50)}...` : 'Gambar cerita';
 
           const storyCard = `
@@ -79,7 +81,7 @@ export default class StoriesPage {
             const lat = parseFloat(event.target.dataset.lat);
             const lon = parseFloat(event.target.dataset.lon);
             const name = event.target.dataset.name;
-            const storyId = event.target.dataset.storyId; // Gunakan storyId dari dataset
+            const storyId = event.target.dataset.storyId;
             const mapContainer = document.getElementById(`map-story-${storyId}`);
 
             if (mapContainer.classList.contains('d-none')) {
