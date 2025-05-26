@@ -1,5 +1,6 @@
 import { addNewStory } from '../../../data/api';
 import UserAuth from '../../../data/user-auth';
+import { startup as initCamera } from '../../../utils/camera-helper';
 import { initMap, setMapClickListener, clearMap, addMarker, setupGeolocation } from '../../../utils/map-helper';
 
 export default class AddStoryPage {
@@ -14,10 +15,20 @@ export default class AddStoryPage {
           </div>
 
           <div class="form-group mb-3">
-            <label for="storyPhoto" class="form-label">Unggah Foto (dari Kamera/Galeri) <span class="required">*</span></label>
-            <input type="file" class="form-control" id="storyPhoto" name="photo" accept="image/*" capture="environment" required aria-label="Unggah foto cerita">
-            <img id="photoPreview" class="photo-preview mt-3 d-none img-fluid" src="#" alt="Pratinjau Foto" />
-            <small id="photoError" class="text-danger d-none">Gagal memuat pratinjau gambar. Pastikan file valid.</small>
+            <div class="camera">
+              <video id="camera-video" class="camera__video">Video stream not available.</video>
+              <canvas id="camera-canvas" class="camera__canvas"></canvas>
+
+              <div class="camera__tools">
+                <select id="camera-list-select"></select>
+                <div class="camera__tools_buttons">
+                  <button id="camera-take-button" class="camera__tools__take-button" type="button">
+                    Ambil Gambar
+                  </button>
+                </div>
+              </div>
+              <img id="photoPreview" class="d-none" alt="Preview Foto" />
+            </div>
           </div>
 
           <div class="form-group mb-4">
@@ -35,10 +46,8 @@ export default class AddStoryPage {
   }
 
   async afterRender() {
+    initCamera();
     const addStoryForm = document.getElementById('addStoryForm');
-    const storyPhotoInput = document.getElementById('storyPhoto');
-    const photoPreview = document.getElementById('photoPreview');
-    const photoErrorDisplay = document.getElementById('photoError');
     const latitudeInput = document.getElementById('latitudeInput');
     const longitudeInput = document.getElementById('longitudeInput');
     const mapCoordinates = document.getElementById('mapCoordinates');
@@ -68,40 +77,43 @@ export default class AddStoryPage {
       addMarker(mapInstance, lat, lon, 'Lokasi Cerita Anda');
     });
 
-    storyPhotoInput.addEventListener('change', (event) => {
-      const file = event.target.files[0];
-      if (file) {
-        photoErrorDisplay.classList.add('d-none');
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          photoPreview.src = e.target.result;
-          photoPreview.classList.remove('d-none');
-        };
-        reader.onerror = () => {
-          photoErrorDisplay.textContent = 'Gagal memuat pratinjau gambar. Format tidak didukung atau rusak.';
-          photoErrorDisplay.classList.remove('d-none');
-          photoPreview.classList.add('d-none');
-          photoPreview.src = '#';
-        };
-        reader.readAsDataURL(file);
-      } else {
-        photoPreview.classList.add('d-none');
-        photoPreview.src = '#';
-        photoErrorDisplay.classList.add('d-none');
-      }
-    });
-
-    addStoryForm.addEventListener('submit', async (event) => {
+   addStoryForm.addEventListener('submit', async (event) => {
       event.preventDefault();
 
       const description = document.getElementById('storyDescription').value;
-      const photoFile = storyPhotoInput.files[0];
+      const photoPreview = document.getElementById('photoPreview');
       const token = UserAuth.getUserToken();
-
-      if (!description || !photoFile) {
+      if (
+        !description ||
+        !photoPreview.src ||
+        photoPreview.classList.contains('d-none') ||
+        !photoPreview.src.startsWith('data:image/')
+      ) {
         alert('Deskripsi dan Foto harus diisi!');
         return;
       }
+
+      // Konversi dataURL ke File
+      function dataURLtoFile(dataurl, filename) {
+        if (!dataurl || !dataurl.includes(',')) {
+          throw new Error('Data URL tidak valid');
+        }
+        const arr = dataurl.split(',');
+        const mimeMatch = arr[0].match(/:(.*?);/);
+        if (!mimeMatch) {
+          throw new Error('Mime type tidak ditemukan');
+        }
+        const mime = mimeMatch[1];
+        const bstr = atob(arr[1]);
+        let n = bstr.length;
+        const u8arr = new Uint8Array(n);
+        while(n--){
+          u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new File([u8arr], filename, {type:mime});
+      }
+
+      const photoFile = dataURLtoFile(photoPreview.src, 'photo.png');
 
       const formData = new FormData();
       formData.append('description', description);
