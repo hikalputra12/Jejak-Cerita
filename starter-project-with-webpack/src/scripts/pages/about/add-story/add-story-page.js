@@ -1,6 +1,6 @@
 import { addNewStory } from '../../../data/api';
 import UserAuth from '../../../data/user-auth';
-import { startup as initCamera } from '../../../utils/camera-helper';
+import { startup as initCamera, stopCurrentStream} from '../../../utils/camera-helper';
 import { initMap, setMapClickListener, clearMap, addMarker, setupGeolocation } from '../../../utils/map-helper';
 
 export default class AddStoryPage {
@@ -46,8 +46,8 @@ export default class AddStoryPage {
   }
 
   async afterRender() {
-    initCamera();
-    const addStoryForm = document.getElementById('addStoryForm');
+    initCamera(); //pemanggilan file startup untuk memunculkan kamera
+    const addStoryForm = document.getElementById('addStoryForm'); //menambah cerita
     const latitudeInput = document.getElementById('latitudeInput');
     const longitudeInput = document.getElementById('longitudeInput');
     const mapCoordinates = document.getElementById('mapCoordinates');
@@ -56,7 +56,7 @@ export default class AddStoryPage {
     let mapInstance = null;
 
     if (!UserAuth.isAuthenticated()) {
-      alert('Anda harus login untuk menambahkan cerita.');
+      alert('Anda harus login untuk menambahkan cerita.'); //memberikan pesan jika anda harus login dan langsung di alihkan ke halaman login
       window.location.hash = '#/login';
       return;
     }
@@ -77,6 +77,7 @@ export default class AddStoryPage {
       addMarker(mapInstance, lat, lon, 'Lokasi Cerita Anda');
     });
 
+    //menambah cerita dengan submit
    addStoryForm.addEventListener('submit', async (event) => {
       event.preventDefault();
 
@@ -143,6 +144,9 @@ export default class AddStoryPage {
         console.error('Error saat menambahkan cerita:', error);
         alert('Terjadi kesalahan saat menambahkan cerita. Silakan coba lagi.');
       }
-    });
+    });   
+  }
+  destroy() {
+    stopCurrentStream();
   }
 }

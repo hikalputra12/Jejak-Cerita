@@ -25,10 +25,13 @@ async function startup() {
     streaming = true; //menandakan bahwa streaming sudah dimulai
   //menangkap gambar
   });
+//menghasilkan gambar yang diambil dari kamera
 function populateTakenPicture(image) {
   const photoPreview = document.getElementById('photoPreview');
   if (photoPreview) {
     photoPreview.src = image;
+    photoPreview.width = 320;   // Ganti sesuai ukuran yang diinginkan
+    photoPreview.height = 240  // Ganti sesuai ukuran yang diinginkan
     photoPreview.classList.remove('d-none');
   }
 }
@@ -80,15 +83,6 @@ function populateTakenPicture(image) {
       throw error; //jika terjadi error, lemparkan error
   }
 }
-//fungsi untuk membuat sumbeer daya kamera sebelumya tidak di gunakan lagi setelah mengganti kamera
-  function stopCurrentStream() {
-      if (!(currentStream instanceof MediaStream)) {
-        return;
-      }
-      currentStream.getTracks().forEach((track) => {
-        track.stop();
-      });
-    }
 
   function cameraLaunch(stream) {
     //menayangkan object stream ini kepada user
@@ -105,6 +99,7 @@ function populateTakenPicture(image) {
 
     return cameraCanvas.toDataURL('image/png'); //mengembalikan data gambar dalam format PNG
   }
+
   //menerapkan kamera list ketika di ubah
     cameraListSelect.addEventListener('change', async (event) => {
     stopCurrentStream(); //menghentikan stream kamera sebelumnya
@@ -117,6 +112,7 @@ function populateTakenPicture(image) {
   cameraTakeButton.addEventListener('click', () => {
     const imageUrl = cameraTakePicture();
     populateTakenPicture(imageUrl);
+    cameraCanvas.classList.add('d-none'); // Sembunyikan canvas setelah ambil gambar
   });
   
   async function init() {
@@ -139,4 +135,22 @@ function populateTakenPicture(image) {
   init();
 }
 
-export { startup };
+function stopCurrentStream() {
+  if (currentStream && typeof currentStream.getTracks === 'function') {
+    currentStream.getTracks().forEach(track => track.stop());
+    currentStream = null;
+  }
+  // Sembunyikan elemen kamera
+  const cameraVideo = document.getElementById('camera-video');
+  const cameraCanvas = document.getElementById('camera-canvas');
+  if (cameraVideo) {
+    cameraVideo.pause();
+    cameraVideo.srcObject = null; // <--- ini penting!
+    cameraVideo.classList.add('d-none');
+  }
+  if(cameraCanvas){
+    cameraCanvas.classList.add('d-none');
+  }
+}
+
+export { startup, stopCurrentStream };
